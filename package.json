@@ -64,6 +64,6 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/potumanojkumarorg/react-smart-date-compare"
+    "url": "git+https://github.com/potumanojkumarorg/react-smart-date-compare.git"
   }
 }

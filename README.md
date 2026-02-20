@@ -135,4 +135,4 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 ## 📄 License
 
-MIT © [potumanojkumarorg](https://www.npmjs.com/~potumanojkumarorg)
+MIT © [POTUMANOJKUMAR](https://github.com/POTUMANOJKUMAR)

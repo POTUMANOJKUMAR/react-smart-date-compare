@@ -3,7 +3,12 @@
 A flexible, Tailwind CSS-powered date range picker with advanced comparison features.
 
 <p align="center">
-    <img src="https://img.shields.io/npm/v/react-smart-date-compare" alt="npm version" />
+    <a href="https://www.npmjs.com/package/react-smart-date-compare">
+        <img src="https://img.shields.io/npm/v/react-smart-date-compare" alt="npm version" />
+    </a>
+    <a href="https://www.npmjs.com/package/react-smart-date-compare">
+        <img src="https://img.shields.io/npm/dm/react-smart-date-compare" alt="npm downloads" />
+    </a>
     <img src="https://img.shields.io/npm/l/react-smart-date-compare" alt="license" />
 </p>
 
@@ -130,4 +135,4 @@ Contributions are welcome! Please open an issue or submit a pull request.
 
 ## 📄 License
 
-MIT © [Your Name]
+MIT © [potumanojkumarorg](https://www.npmjs.com/~potumanojkumarorg)

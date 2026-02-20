@@ -60,10 +60,10 @@
     "date-fns",
     "tailwind"
   ],
-  "author": "",
+  "author": "potumanojkumarorg",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/potumanojkumarorg/react-smart-date-compare"
   }
 }

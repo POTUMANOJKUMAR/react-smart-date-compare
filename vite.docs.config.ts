@@ -11,6 +11,6 @@ export default defineConfig({
     plugins: [react(), tailwindcss()],
     base: isLocal ? '/' : '/react-smart-date-compare/',
     build: {
-        outDir: 'docs-dist',
+        outDir: 'maindist-doc',
     },
 });

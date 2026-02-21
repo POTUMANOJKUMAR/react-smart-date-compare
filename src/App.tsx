@@ -48,8 +48,8 @@ const Footer = () => (
         <div style={{ display: 'flex', gap: 20 }}>
           {[
             { label: 'npm', href: 'https://www.npmjs.com/package/react-smart-date-compare' },
-            { label: 'GitHub', href: 'https://github.com' },
-            { label: 'Changelog', href: '#' },
+            { label: 'GitHub', href: 'https://github.com/POTUMANOJKUMAR/react-smart-date-compare' },
+            { label: 'Changelog', href: 'https://github.com/POTUMANOJKUMAR/react-smart-date-compare/releases' },
           ].map(link => (
             <a key={link.label} href={link.href} target="_blank" rel="noreferrer"
               style={{ fontSize: 13, color: '#5a5a7a', textDecoration: 'none', transition: 'color 0.15s' }}

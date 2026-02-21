@@ -85,7 +85,7 @@ export const HeroPage: React.FC<{ setPage: (p: string) => void }> = ({ setPage }
                         fontSize: 12, color: '#a5b4fc', fontWeight: 600, letterSpacing: '0.04em',
                     }}>
                         <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#22c55e', display: 'inline-block' }} />
-                        v1.0.0 — Now on NPM
+                        v1.1.1 — Now on NPM
                     </div>
 
                     {/* Headline */}

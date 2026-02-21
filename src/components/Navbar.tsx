@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface NavbarProps {
     page: string;
@@ -36,7 +36,7 @@ const NavLink: React.FC<{ label: string; active: boolean; onClick: () => void }>
             padding: '6px 12px', borderRadius: 6,
             fontSize: 14, fontWeight: 500,
             color: active ? '#f1f1f3' : '#8a8a9a',
-            background: active ? 'rgba(255,255,255,0.06)' : 'transparent',
+            backgroundColor: active ? 'rgba(255,255,255,0.06)' : 'transparent',
             transition: 'all 0.15s',
             fontFamily: 'inherit',
         }}
@@ -48,7 +48,6 @@ const NavLink: React.FC<{ label: string; active: boolean; onClick: () => void }>
 );
 
 export const Navbar: React.FC<NavbarProps> = ({ page, setPage }) => {
-    const [mobileOpen, setMobileOpen] = useState(false);
 
     return (
         <nav style={{
@@ -87,12 +86,12 @@ export const Navbar: React.FC<NavbarProps> = ({ page, setPage }) => {
                     }}
                 >
                     <span style={{ color: '#cb3837', fontWeight: 700 }}>npm</span>
-                    <span>v1.0.0</span>
+                    <span>v1.1.1</span>
                 </a>
 
                 {/* GitHub */}
                 <a
-                    href="https://github.com"
+                    href="https://github.com/POTUMANOJKUMAR/react-smart-date-compare"
                     target="_blank"
                     rel="noreferrer"
                     style={{

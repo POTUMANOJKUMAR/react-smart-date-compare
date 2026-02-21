@@ -14,6 +14,7 @@ export const SmartDateCompare: React.FC<SmartDateCompareProps> = ({
     primaryColor,
     compareColor,
     enableCompare = false,
+    showCompareToggle = false,
     compareMode = 'previousPeriod',
     className,
     style,
@@ -121,13 +122,28 @@ export const SmartDateCompare: React.FC<SmartDateCompareProps> = ({
         onCancel?.();
     };
 
+    // Quick toggle handler for comparison (without opening picker)
+    const handleQuickCompareToggle = (e: React.MouseEvent) => {
+        e.stopPropagation(); // Avoid opening the picker
+        const next = !internalEnableCompare;
+        setInternalEnableCompare(next);
+
+        // If enabling, we need an actual compare range calculated
+        if (next && !internalCompareRange) {
+            // Placeholder: picker will re-calculate on internal mount,
+            // but for immediate UI feedback we can trigger onApply logic
+        }
+
+        onApply?.(internalRange, next ? internalCompareRange : undefined);
+    };
+
     const formatDate = (d: Date) => format(d, 'MMM d, yyyy', { locale });
     const label = `${formatDate(internalRange.startDate)} - ${formatDate(internalRange.endDate)}`;
 
     return (
         <div
             ref={triggerRef}
-            className={`relative inline-block text-left ${className || ''} ${classNames?.root || ''}`}
+            className={`relative inline-block text-left sdc-root ${className || ''} ${classNames?.root || ''}`}
             style={{
                 '--sdc-primary-color': primaryColor,
                 '--sdc-compare-color': compareColor,
@@ -142,13 +158,28 @@ export const SmartDateCompare: React.FC<SmartDateCompareProps> = ({
                 aria-haspopup="dialog"
                 aria-expanded={isOpen}
             >
-                <div className="flex items-center gap-2 text-gray-700">
-                    <span className="text-gray-400">
-                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                    </span>
-                    <span className="text-sm font-medium">{label}</span>
+                <div className="flex items-center gap-3 text-gray-700">
+                    {showCompareToggle && (
+                        <div
+                            className={`relative inline-flex h-4 w-7 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out`}
+                            style={{ backgroundColor: internalEnableCompare ? primaryColor : '#d1d5db' }}
+                            onClick={handleQuickCompareToggle}
+                            title="Toggle comparison"
+                        >
+                            <span
+                                aria-hidden="true"
+                                className={`pointer-events-none inline-block h-3 w-3 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${internalEnableCompare ? 'translate-x-3' : 'translate-x-0'}`}
+                            />
+                        </div>
+                    )}
+                    <div className="flex items-center gap-2">
+                        <span className="text-gray-400">
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </span>
+                        <span className="text-sm font-medium">{label}</span>
+                    </div>
                 </div>
                 {internalCompareRange && (
                     <span
@@ -180,7 +211,7 @@ export const SmartDateCompare: React.FC<SmartDateCompareProps> = ({
                     aria-modal="true"
                 >
                     <div
-                        className={`bg-white ring-1 ring-black ring-opacity-5 rounded-lg shadow-2xl overflow-hidden ${classNames?.calendar || ''}`}
+                        className={`bg-white ring-1 ring-black ring-opacity-5 rounded-lg shadow-2xl overflow-hidden sdc-root ${classNames?.calendar || ''}`}
                         style={{ '--sdc-primary-color': primaryColor, '--sdc-compare-color': compareColor } as React.CSSProperties}
                     >
                         <DateRangePicker

@@ -31,6 +31,7 @@ export interface SmartDateCompareProps {
     // Customization
     presets?: Preset[];
     enableCompare?: boolean;
+    showCompareToggle?: boolean;
     compareMode?: CompareMode;
 
     // Constraints & Logic

@@ -132,6 +132,9 @@ export const DateRangePicker: React.FC<Props> = ({
         return subMonths(startOfMonth(end), 1);
     });
 
+    // Sidebar Toggle State
+    const [showSidebar, setShowSidebar] = useState(true);
+
     // Effect: Update compare range when main range changes (if not custom compare)
     useEffect(() => {
         if (compareEnabled && !selecting && startDate && endDate && compareMode !== 'custom') {
@@ -276,8 +279,8 @@ export const DateRangePicker: React.FC<Props> = ({
     return (
         <div className={`flex bg-white h-[450px] ${classNames?.root || ''}`}>
             {/* Left Sidebar Pane - Fixed Height, Scrollable Presets + Fixed Compare Bottom */}
-            <div className={`w-48 bg-gray-50/50 border-r border-gray-100 flex flex-col h-full shrink-0 ${classNames?.sidebar || ''}`}>
-                <div className="flex-1 overflow-y-auto preset-scrollbar">
+            <div className={`bg-gray-50/50 border-r border-gray-100 flex flex-col h-full shrink-0 transition-all duration-300 overflow-hidden ${showSidebar ? 'w-48 opacity-100' : 'w-0 opacity-0 border-none'} ${classNames?.sidebar || ''}`}>
+                <div className="flex-1 overflow-y-auto preset-scrollbar min-w-[12rem]">
                     <PresetSidebar
                         presets={presets}
                         onSelect={handlePresetSelect}
@@ -287,7 +290,7 @@ export const DateRangePicker: React.FC<Props> = ({
                     />
                 </div>
 
-                <div className="p-3 border-t border-gray-200 bg-gray-50/80 backdrop-blur-sm">
+                <div className="p-3 border-t border-gray-200 bg-gray-50/80 backdrop-blur-sm min-w-[12rem]">
                     <CompareSection
                         enabled={compareEnabled}
                         mode={compareMode}
@@ -303,12 +306,23 @@ export const DateRangePicker: React.FC<Props> = ({
             <div className="flex flex-col flex-1 h-full overflow-hidden">
                 {/* Navigation Header */}
                 <div className="flex justify-between items-center px-4 py-2 border-b border-gray-100 shrink-0">
-                    <button
-                        className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
-                        onClick={handleNavPrev}
-                    >
-                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <button
+                            className="p-1.5 rounded-md hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+                            onClick={() => setShowSidebar(!showSidebar)}
+                            title={showSidebar ? "Hide sidebar" : "Show sidebar"}
+                        >
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
+                        <button
+                            className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
+                            onClick={handleNavPrev}
+                        >
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+                        </button>
+                    </div>
 
                     <div className="text-xs font-medium text-gray-500 flex flex-col items-center">
                         {startDate && endDate ? (

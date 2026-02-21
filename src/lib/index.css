@@ -1,4 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
+
+@layer base {
+    .sdc-root {
+        --sdc-font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+        font-family: var(--sdc-font-sans);
+        font-size: 15px;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Localized reset for buttons and inputs within sdc-root to avoid host overrides */
+    .sdc-root button,
+    .sdc-root input,
+    .sdc-root select {
+        font-family: inherit;
+        font-size: 100%;
+        line-height: inherit;
+        margin: 0;
+        padding: 0;
+        text-transform: none;
+        -webkit-appearance: button;
+        appearance: button;
+        background-color: transparent;
+        background-image: none;
+        border: none;
+        border-radius: 0;
+        cursor: pointer;
+    }
+
+    /* Ensure specific buttons in our component retain their intended styling */
+    .sdc-root .px-3 {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+    }
+
+    .sdc-root .py-2 {
+        padding-top: 0.5rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .sdc-root * {
+        box-sizing: border-box;
+        border-color: #e5e7eb;
+        /* tailwind default gray-200 */
+    }
+}
 
 @layer components {
 
@@ -14,5 +62,22 @@
     .preset-scrollbar::-webkit-scrollbar-thumb {
         background-color: #e5e7eb;
         border-radius: 20px;
+    }
+
+    /* Animations if used in component */
+    @keyframes sdcFadeUp {
+        from {
+            opacity: 0;
+            transform: translateY(8px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .sdc-animate-fade-up {
+        animation: sdcFadeUp 0.3s ease both;
     }
 }

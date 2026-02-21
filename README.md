@@ -34,11 +34,13 @@ yarn add react-smart-date-compare date-fns
 
 ### 1. Import Styles
 
-Ensure you import the CSS file in your main entry point (e.g., `App.tsx` or `main.tsx`):
+Essential: Import the bundled CSS to ensure the component looks exactly like the preview. This includes the Inter font and baseline styles.
 
 ```tsx
 import 'react-smart-date-compare/style.css';
 ```
+
+> **Note**: Tailwind CSS is used internally to build the package, but you **do not** need to have Tailwind installed in your host project. The styles are self-contained.
 
 ### 2. Basic Example
 

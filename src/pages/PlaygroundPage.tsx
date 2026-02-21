@@ -71,6 +71,7 @@ interface PlaygroundConfig {
     primaryColor: string;
     compareColor: string;
     enableCompare: boolean;
+    showCompareToggle: boolean;
     compareMode: CompareMode;
     disableFuture: boolean;
     disablePast: boolean;
@@ -83,6 +84,7 @@ const DEFAULT_CONFIG: PlaygroundConfig = {
     primaryColor: '#6366f1',
     compareColor: '#f97316',
     enableCompare: false,
+    showCompareToggle: true,
     compareMode: 'previousPeriod',
     disableFuture: false,
     disablePast: false,
@@ -94,6 +96,7 @@ function exampleToConfig(props: Partial<SmartDateCompareProps>): PlaygroundConfi
         primaryColor: (props as any).primaryColor || '#6366f1',
         compareColor: (props as any).compareColor || '#f97316',
         enableCompare: !!(props as any).enableCompare,
+        showCompareToggle: (props as any).showCompareToggle !== false,
         compareMode: ((props as any).compareMode as CompareMode) || 'previousPeriod',
         disableFuture: !!(props as any).disableFuture,
         disablePast: !!(props as any).disablePast,
@@ -132,6 +135,7 @@ export const PlaygroundPage: React.FC = () => {
         `  primaryColor="${config.primaryColor}"`,
         `  compareColor="${config.compareColor}"`,
         config.enableCompare ? `  enableCompare={true}` : null,
+        config.showCompareToggle ? `  showCompareToggle={true}` : null,
         config.enableCompare ? `  compareMode="${config.compareMode}"` : null,
         config.disableFuture ? `  disableFuture={true}` : null,
         config.disablePast ? `  disablePast={true}` : null,
@@ -209,6 +213,11 @@ export const PlaygroundPage: React.FC = () => {
                                 label="Enable Compare"
                                 checked={config.enableCompare}
                                 onChange={v => update({ enableCompare: v })}
+                            />
+                            <Toggle
+                                label="Show Comparison Toggle"
+                                checked={config.showCompareToggle}
+                                onChange={v => update({ showCompareToggle: v })}
                             />
                             {config.enableCompare && (
                                 <Select
@@ -292,6 +301,7 @@ export const PlaygroundPage: React.FC = () => {
                                 primaryColor={config.primaryColor}
                                 compareColor={config.compareColor}
                                 enableCompare={config.enableCompare}
+                                showCompareToggle={config.showCompareToggle}
                                 compareMode={config.compareMode}
                                 disableFuture={config.disableFuture}
                                 disablePast={config.disablePast}

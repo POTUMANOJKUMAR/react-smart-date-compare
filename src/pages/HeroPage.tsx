@@ -63,10 +63,7 @@ export const HeroPage: React.FC<{ setPage: (p: string) => void }> = ({ setPage }
     return (
         <div>
             {/* ── Hero ─────────────────────────────────────────────── */}
-            <section className="dot-grid" style={{
-                padding: '100px 0 80px',
-                position: 'relative', overflow: 'hidden',
-            }}>
+            <section className="dot-grid py-12 md:py-24 relative overflow-hidden">
                 {/* Glow orbs */}
                 <div style={{
                     position: 'absolute', top: -100, left: '50%', transform: 'translateX(-50%)',
@@ -89,22 +86,14 @@ export const HeroPage: React.FC<{ setPage: (p: string) => void }> = ({ setPage }
                     </div>
 
                     {/* Headline */}
-                    <h1 className="animate-fade-up" style={{
-                        margin: '0 0 18px',
-                        fontSize: 'clamp(32px, 6vw, 60px)',
-                        fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 1.1,
-                        color: '#f1f1f3',
-                    }}>
+                    <h1 className="animate-fade-up px-4 text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter leading-[1.1] text-[#f1f1f3] mb-6">
                         Enterprise{' '}
                         <span className="gradient-text">Google Analytics</span>
-                        <br />
+                        <br className="hidden md:block" />
                         Style Date Picker for React
                     </h1>
 
-                    <p className="animate-fade-up-delay" style={{
-                        margin: '0 auto 40px',
-                        maxWidth: 520, fontSize: 18, color: '#8a8a9a', lineHeight: 1.65,
-                    }}>
+                    <p className="animate-fade-up-delay max-w-[520px] mx-auto mb-10 px-4 text-base md:text-lg text-[#8a8a9a] leading-relaxed">
                         A production-ready date range picker with compare mode, grouped presets,
                         full theming, and zero heavy dependencies.
                     </p>
@@ -187,14 +176,7 @@ export const HeroPage: React.FC<{ setPage: (p: string) => void }> = ({ setPage }
             </section>
 
             {/* ── Stats Bar ────────────────────────────────────────── */}
-            <div style={{
-                display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
-                padding: '28px 40px', margin: '0 0',
-                borderTop: '1px solid rgba(255,255,255,0.05)',
-                borderBottom: '1px solid rgba(255,255,255,0.05)',
-                background: 'rgba(255,255,255,0.02)',
-                gap: 24,
-            }}>
+            <div className="grid grid-cols-2 lg:grid-cols-4 py-8 md:py-10 border-y border-white/5 bg-white/[0.02] gap-6 md:gap-8 px-4">
                 <Stat value="0" label="Breaking Dependencies" />
                 <Stat value="4" label="Compare Modes" />
                 <Stat value="13+" label="Built-in Presets" />
@@ -215,13 +197,7 @@ export const HeroPage: React.FC<{ setPage: (p: string) => void }> = ({ setPage }
                     </p>
                 </div>
 
-                <div style={{
-                    padding: '60px 40px',
-                    borderRadius: 16,
-                    border: '1px solid rgba(99,102,241,0.15)',
-                    background: 'radial-gradient(ellipse at 50% 30%, rgba(99,102,241,0.07), transparent 70%)',
-                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24,
-                }}>
+                <div className="p-6 md:p-14 md:px-20 rounded-2xl border border-[#6366f1]/15 bg-radial-[ellipse_at_50%_30%] from-[#6366f1]/10 to-transparent flex flex-col items-center gap-6 mx-4">
                     <SmartDateCompare
                         value={range}
                         enableCompare
@@ -231,12 +207,8 @@ export const HeroPage: React.FC<{ setPage: (p: string) => void }> = ({ setPage }
                         onApply={(r) => setRange(r)}
                     />
                     {range && (
-                        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
-                            <div style={{
-                                padding: '8px 18px', borderRadius: 8,
-                                background: 'rgba(99,102,241,0.1)', border: '1px solid rgba(99,102,241,0.2)',
-                                fontSize: 13, color: '#a5b4fc', fontFamily: 'var(--font-mono)',
-                            }}>
+                        <div className="flex gap-3 flex-wrap justify-center">
+                            <div className="px-4 py-2 rounded-lg bg-[#6366f1]/10 border border-[#6366f1]/20 text-xs md:text-sm text-[#a5b4fc] font-mono">
                                 {range.startDate.toLocaleDateString()} → {range.endDate.toLocaleDateString()}
                             </div>
                         </div>
@@ -283,13 +255,13 @@ export const HeroPage: React.FC<{ setPage: (p: string) => void }> = ({ setPage }
             </section>
 
             {/* ── Quick Start Code ─────────────────────────────────── */}
-            <section style={{ padding: '0 0 80px' }}>
+            <section style={{ padding: '40px 0 80px' }}>
                 <div style={{ textAlign: 'center', marginBottom: 32 }}>
                     <h2 style={{ margin: 0, fontSize: 24, fontWeight: 800, color: '#f1f1f3', letterSpacing: '-0.02em' }}>
                         Up and running in minutes
                     </h2>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 px-4 max-w-4xl mx-auto">
                     <div>
                         <div style={{ fontSize: 11, fontWeight: 700, color: '#5a5a7a', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>1. Install</div>
                         <CodeBlock code={INSTALL_CODE} language="bash" />
@@ -299,11 +271,11 @@ export const HeroPage: React.FC<{ setPage: (p: string) => void }> = ({ setPage }
                         <CodeBlock code={IMPORT_CODE} language="tsx" />
                     </div>
                 </div>
-                <div style={{ marginTop: 12, textAlign: 'center' }}>
+                <div style={{ marginTop: 24, textAlign: 'center' }}>
                     <button
                         onClick={() => setPage('docs')}
                         style={{
-                            marginTop: 12, padding: '10px 24px', borderRadius: 8,
+                            padding: '10px 24px', borderRadius: 8,
                             background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.3)',
                             color: '#a5b4fc', fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: 'inherit',
                             display: 'inline-flex', alignItems: 'center', gap: 6,

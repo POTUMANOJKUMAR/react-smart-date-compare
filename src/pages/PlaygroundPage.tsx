@@ -78,6 +78,7 @@ interface PlaygroundConfig {
     weekStartsOn: 0 | 1 | 2 | 3 | 4 | 5 | 6;
     labels?: Partial<SmartDateCompareProps['labels']>;
     classNames?: SmartDateCompareProps['classNames'];
+    isCompare: boolean;
 }
 
 const DEFAULT_CONFIG: PlaygroundConfig = {
@@ -89,6 +90,7 @@ const DEFAULT_CONFIG: PlaygroundConfig = {
     disableFuture: false,
     disablePast: false,
     weekStartsOn: 0,
+    isCompare: true,
 };
 
 function exampleToConfig(props: Partial<SmartDateCompareProps>): PlaygroundConfig {
@@ -103,6 +105,7 @@ function exampleToConfig(props: Partial<SmartDateCompareProps>): PlaygroundConfi
         weekStartsOn: ((props as any).weekStartsOn ?? 0) as 0 | 1 | 2 | 3 | 4 | 5 | 6,
         labels: (props as any).labels,
         classNames: (props as any).classNames,
+        isCompare: (props as any).isCompare !== false,
     };
 }
 
@@ -140,6 +143,7 @@ export const PlaygroundPage: React.FC = () => {
         config.disableFuture ? `  disableFuture={true}` : null,
         config.disablePast ? `  disablePast={true}` : null,
         config.weekStartsOn !== 0 ? `  weekStartsOn={${config.weekStartsOn}}` : null,
+        !config.isCompare ? `  isCompare={false}` : null,
         `  onApply={(range, compareRange) => console.log(range, compareRange)}`,
         `/>`,
     ].filter(Boolean).join('\n');
@@ -147,29 +151,29 @@ export const PlaygroundPage: React.FC = () => {
     return (
         <div style={{ padding: '40px 0 80px' }}>
             {/* Page Header */}
-            <div style={{ marginBottom: 40 }}>
-                <div style={{ display: 'inline-flex', padding: '3px 12px', borderRadius: 100, marginBottom: 12, fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#a5b4fc', background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.25)' }}>
+            <div className="mb-10 px-4 md:px-0">
+                <div className="inline-flex px-3 py-1 rounded-full mb-3 text-[10px] md:text-xs font-bold tracking-wider uppercase text-[#a5b4fc] bg-[#6366f1]/10 border border-[#6366f1]/25">
                     Interactive
                 </div>
-                <h1 style={{ margin: 0, fontSize: 34, fontWeight: 800, color: '#f1f1f3', letterSpacing: '-0.02em' }}>Playground</h1>
-                <p style={{ margin: '8px 0 0', fontSize: 16, color: '#8a8a9a', maxWidth: 500 }}>
+                <h1 className="text-3xl md:text-4xl font-black text-[#f1f1f3] tracking-tight m-0">Playground</h1>
+                <p className="mt-2 text-sm md:text-base text-[#8a8a9a] max-w-lg">
                     Tweak props in real time and see the component respond instantly.
                 </p>
             </div>
 
             {/* Example switcher tabs */}
-            <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 28 }}>
+            <div className="flex gap-2 flex-wrap mb-8 px-4 md:px-0">
                 {EXAMPLE_CONFIGS.map(ex => (
                     <button
                         key={ex.id}
                         onClick={() => loadExample(ex.id)}
+                        className={`px-4 py-1.5 rounded-full border-none font-sans text-xs font-semibold cursor-pointer transition-all duration-200 ${activeExample === ex.id
+                            ? 'text-white'
+                            : 'bg-white/5 text-[#9a9aaa] hover:bg-white/10'
+                            }`}
                         style={{
-                            padding: '6px 16px', borderRadius: 100, border: 'none',
-                            fontFamily: 'inherit', fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
-                            background: activeExample === ex.id ? ex.tagColor : 'rgba(255,255,255,0.05)',
-                            color: activeExample === ex.id ? '#fff' : '#9a9aaa',
+                            background: activeExample === ex.id ? ex.tagColor : undefined,
                             boxShadow: activeExample === ex.id ? `0 0 16px ${ex.tagColor}40` : 'none',
-                            transition: 'all 0.2s',
                         }}
                     >
                         {ex.title}
@@ -178,10 +182,10 @@ export const PlaygroundPage: React.FC = () => {
             </div>
 
             {/* 2-col layout */}
-            <div style={{ display: 'grid', gridTemplateColumns: '280px 1fr', gap: 20, alignItems: 'start' }}>
+            <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6 px-4 md:px-0 items-start">
 
                 {/* ── Left: Props Editor ── */}
-                <div style={{ borderRadius: 10, border: '1px solid rgba(255,255,255,0.07)', background: 'var(--color-surface)', overflow: 'hidden', position: 'sticky', top: 80 }}>
+                <div className="rounded-xl border border-white/5 bg-[#111118] overflow-hidden lg:sticky lg:top-20">
                     <div style={{ padding: '14px 16px', borderBottom: '1px solid rgba(255,255,255,0.06)', background: 'rgba(255,255,255,0.02)', display: 'flex', alignItems: 'center', gap: 8 }}>
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6366f1" strokeWidth="2">
                             <path d="M12 20h9" /><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" />
@@ -206,33 +210,45 @@ export const PlaygroundPage: React.FC = () => {
                             />
                         </div>
 
-                        {/* Compare */}
+                        {/* Mode Selection */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                            <SectionTitle>Compare</SectionTitle>
+                            <SectionTitle>Mode</SectionTitle>
                             <Toggle
-                                label="Enable Compare"
-                                checked={config.enableCompare}
-                                onChange={v => update({ enableCompare: v })}
+                                label="Range + Compare"
+                                checked={config.isCompare}
+                                onChange={v => update({ isCompare: v })}
                             />
-                            <Toggle
-                                label="Show Comparison Toggle"
-                                checked={config.showCompareToggle}
-                                onChange={v => update({ showCompareToggle: v })}
-                            />
-                            {config.enableCompare && (
-                                <Select
-                                    label="Mode"
-                                    value={config.compareMode}
-                                    onChange={v => update({ compareMode: v as CompareMode })}
-                                    options={[
-                                        { label: 'Prev period (match day)', value: 'previousPeriodMatchDay' },
-                                        { label: 'Previous period', value: 'previousPeriod' },
-                                        { label: 'Same period last year', value: 'samePeriodLastYear' },
-                                        { label: 'Custom range', value: 'custom' },
-                                    ]}
-                                />
-                            )}
                         </div>
+
+                        {/* Compare */}
+                        {config.isCompare && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                                <SectionTitle>Compare</SectionTitle>
+                                <Toggle
+                                    label="Enable Compare"
+                                    checked={config.enableCompare}
+                                    onChange={v => update({ enableCompare: v })}
+                                />
+                                <Toggle
+                                    label="Show Comparison Toggle"
+                                    checked={config.showCompareToggle}
+                                    onChange={v => update({ showCompareToggle: v })}
+                                />
+                                {config.enableCompare && (
+                                    <Select
+                                        label="Mode"
+                                        value={config.compareMode}
+                                        onChange={v => update({ compareMode: v as CompareMode })}
+                                        options={[
+                                            { label: 'Prev period (match day)', value: 'previousPeriodMatchDay' },
+                                            { label: 'Previous period', value: 'previousPeriod' },
+                                            { label: 'Same period last year', value: 'samePeriodLastYear' },
+                                            { label: 'Custom range', value: 'custom' },
+                                        ]}
+                                    />
+                                )}
+                            </div>
+                        )}
 
                         {/* Constraints */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -289,12 +305,7 @@ export const PlaygroundPage: React.FC = () => {
                         </div>
 
                         {/* The component — key forces full re-mount on example switch */}
-                        <div style={{
-                            padding: '60px 40px',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center',
-                            background: 'radial-gradient(ellipse at 50% 50%, rgba(99,102,241,0.04) 0%, transparent 70%)',
-                            minHeight: 200,
-                        }}>
+                        <div className="py-12 md:py-20 px-4 md:px-10 flex items-center justify-center bg-radial-[ellipse_at_50%_50%] from-[#6366f1]/5 to-transparent min-h-[250px]">
                             <SmartDateCompare
                                 key={previewKey}
                                 defaultValue={{ startDate: subDays(new Date(), 30), endDate: new Date() }}
@@ -308,6 +319,7 @@ export const PlaygroundPage: React.FC = () => {
                                 weekStartsOn={config.weekStartsOn}
                                 labels={config.labels}
                                 classNames={config.classNames}
+                                isCompare={config.isCompare}
                             />
                         </div>
                     </div>

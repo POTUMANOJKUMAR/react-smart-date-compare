@@ -1,8 +1,6 @@
 import React from 'react';
-import { SmartDateCompare } from '../lib/components/SmartDateCompare';
 import { CodeBlock } from '../components/CodeBlock';
 import { PropsTable } from '../components/PropsTable';
-import { subDays } from 'date-fns';
 
 const SectionHeader: React.FC<{
     id: string;
@@ -151,9 +149,9 @@ const FOLDER_STRUCTURE = `src/
 └── App.tsx`;
 
 export const DocsPage: React.FC = () => (
-    <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr', gap: 40, padding: '40px 0 80px', alignItems: 'start' }}>
+    <div className="grid grid-cols-1 lg:grid-cols-[200px_1fr] gap-10 py-10 md:py-20 px-4 md:px-0 items-start">
         {/* Sidebar TOC */}
-        <nav style={{ position: 'sticky', top: 80, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <nav className="hidden lg:flex sticky top-20 flex-col gap-0.5">
             {[
                 { id: 'install', label: 'Installation' },
                 { id: 'usage', label: 'Basic Usage' },
@@ -188,10 +186,10 @@ export const DocsPage: React.FC = () => (
         </nav>
 
         {/* Main content */}
-        <div style={{ maxWidth: 860 }}>
+        <div className="max-w-full lg:max-w-[860px]">
             {/* Page heading */}
-            <div style={{ paddingTop: 20, marginBottom: 40 }}>
-                <h1 style={{ margin: 0, fontSize: 38, fontWeight: 800, color: '#f1f1f3', letterSpacing: '-0.03em' }}>
+            <div className="pt-5 md:pt-10 mb-10">
+                <h1 className="text-3xl md:text-5xl font-black text-[#f1f1f3] tracking-tighter m-0">
                     Documentation
                 </h1>
                 <p style={{ margin: '10px 0 0', fontSize: 16, color: '#8a8a9a', maxWidth: 540 }}>

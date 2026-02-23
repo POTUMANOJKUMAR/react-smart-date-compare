@@ -3,20 +3,16 @@ import { EXAMPLE_CONFIGS } from '../data/exampleConfigs';
 import { ExampleCard } from '../components/ExampleCard';
 
 export const ExamplesPage: React.FC = () => (
-    <div style={{ padding: '40px 0 80px' }}>
+    <div className="py-10 md:py-20 px-4 md:px-0">
         {/* Header */}
-        <div style={{ marginBottom: 48 }}>
-            <div style={{
-                display: 'inline-flex', padding: '3px 12px', borderRadius: 100, marginBottom: 12,
-                fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase',
-                color: '#a5b4fc', background: 'rgba(99,102,241,0.12)', border: '1px solid rgba(99,102,241,0.25)',
-            }}>
+        <div className="mb-12">
+            <div className="inline-flex px-3 py-1 rounded-full mb-3 text-[10px] md:text-xs font-bold tracking-wider uppercase text-[#a5b4fc] bg-[#6366f1]/10 border border-[#6366f1]/25">
                 Examples
             </div>
-            <h1 style={{ margin: 0, fontSize: 34, fontWeight: 800, color: '#f1f1f3', letterSpacing: '-0.02em' }}>
+            <h1 className="text-3xl md:text-4xl font-black text-[#f1f1f3] tracking-tight m-0">
                 Real-world patterns
             </h1>
-            <p style={{ margin: '10px 0 0', fontSize: 16, color: '#8a8a9a', maxWidth: 520, lineHeight: 1.6 }}>
+            <p className="mt-3 text-sm md:text-base text-[#8a8a9a] max-w-lg leading-relaxed">
                 Copy-paste ready examples covering the most common integration scenarios. Each example includes the live component and source code.
             </p>
         </div>
@@ -41,7 +37,7 @@ export const ExamplesPage: React.FC = () => (
         </div>
 
         {/* Examples grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(480px, 1fr))', gap: 20 }}>
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
             {EXAMPLE_CONFIGS.map((config, i) => (
                 <ExampleCard key={config.id} config={config} index={i} />
             ))}

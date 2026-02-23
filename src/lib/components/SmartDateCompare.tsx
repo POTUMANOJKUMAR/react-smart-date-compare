@@ -27,6 +27,7 @@ export const SmartDateCompare: React.FC<SmartDateCompareProps> = ({
     locale,
     labels,
     classNames,
+    isCompare = true,
 }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [internalRange, setInternalRange] = useState<DateRange>(
@@ -138,7 +139,9 @@ export const SmartDateCompare: React.FC<SmartDateCompareProps> = ({
     };
 
     const formatDate = (d: Date) => format(d, 'MMM d, yyyy', { locale });
-    const label = `${formatDate(internalRange.startDate)} - ${formatDate(internalRange.endDate)}`;
+    const label = isCompare
+        ? `${formatDate(internalRange.startDate)} - ${formatDate(internalRange.endDate)}`
+        : formatDate(internalRange.startDate);
 
     return (
         <div
@@ -152,14 +155,14 @@ export const SmartDateCompare: React.FC<SmartDateCompareProps> = ({
         >
             {/* Trigger Button */}
             <button
-                className={`flex items-center justify-between min-w-[240px] px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm ${classNames?.container || ''}`}
+                className={`flex items-center justify-between w-full md:min-w-[240px] md:w-auto px-3 py-2 bg-white border border-gray-300 rounded hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all shadow-sm ${classNames?.container || ''}`}
                 onClick={handleToggle}
                 type="button"
                 aria-haspopup="dialog"
                 aria-expanded={isOpen}
             >
                 <div className="flex items-center gap-3 text-gray-700">
-                    {showCompareToggle && (
+                    {isCompare && showCompareToggle && (
                         <div
                             className={`relative inline-flex h-4 w-7 shrink-0 cursor-pointer rounded-full border border-transparent transition-colors duration-200 ease-in-out`}
                             style={{ backgroundColor: internalEnableCompare ? primaryColor : '#d1d5db' }}
@@ -211,7 +214,7 @@ export const SmartDateCompare: React.FC<SmartDateCompareProps> = ({
                     aria-modal="true"
                 >
                     <div
-                        className={`bg-white ring-1 ring-black ring-opacity-5 rounded-lg shadow-2xl overflow-hidden sdc-root ${classNames?.calendar || ''}`}
+                        className={`bg-white ring-1 ring-black ring-opacity-5 rounded-lg shadow-2xl overflow-hidden sdc-root sdc-animate-fade-up ${classNames?.calendar || ''}`}
                         style={{ '--sdc-primary-color': primaryColor, '--sdc-compare-color': compareColor } as React.CSSProperties}
                     >
                         <DateRangePicker
@@ -233,6 +236,7 @@ export const SmartDateCompare: React.FC<SmartDateCompareProps> = ({
                             locale={locale}
                             labels={labels}
                             classNames={classNames}
+                            isCompare={isCompare}
                         />
                     </div>
                 </div>,

@@ -60,6 +60,7 @@ interface Props {
         buttonCancel?: string;
         presetActive?: string;
     };
+    isCompare?: boolean;
 }
 
 export const DateRangePicker: React.FC<Props> = ({
@@ -81,6 +82,7 @@ export const DateRangePicker: React.FC<Props> = ({
     locale,
     labels,
     classNames,
+    isCompare = true,
 }) => {
     // Range State
     const [startDate, setStartDate] = useState<Date | undefined>(initialRange?.startDate);
@@ -128,8 +130,8 @@ export const DateRangePicker: React.FC<Props> = ({
     // View State (Left Calendar Month)
     // Default to showing endDate's month on the right, so viewDate is endDate - 1 month
     const [viewDate, setViewDate] = useState<Date>(() => {
-        const end = initialRange?.endDate || new Date();
-        return subMonths(startOfMonth(end), 1);
+        const end = initialRange?.endDate || initialRange?.startDate || new Date();
+        return isCompare ? subMonths(startOfMonth(end), 1) : startOfMonth(end);
     });
 
     // Sidebar Toggle State
@@ -160,6 +162,15 @@ export const DateRangePicker: React.FC<Props> = ({
         if (minDate && isBefore(date, minDate)) return;
         if (maxDate && isBefore(maxDate, date)) return;
         // Check disabledDates array if needed (simplified check here, can rely on CalendarMonth visual disable)
+
+        if (!isCompare) {
+            // Single date selection mode
+            setStartDate(date);
+            setEndDate(date);
+            setSelecting(false);
+            setActivePreset('custom');
+            return;
+        }
 
         if (!selecting) {
             // Start selection - effectively custom
@@ -233,18 +244,19 @@ export const DateRangePicker: React.FC<Props> = ({
         setSelectionTarget('primary'); // Reset to primary since preset implies primary change
 
         // Move view to show the selected range
-        setViewDate(subMonths(startOfMonth(range.endDate), 1));
+        setViewDate(isCompare ? subMonths(startOfMonth(range.endDate), 1) : startOfMonth(range.startDate));
     };
 
     const handleNavPrev = () => setViewDate(subMonths(viewDate, 1));
     const handleNavNext = () => setViewDate(addMonths(viewDate, 1));
 
     const handleApply = () => {
-        if (startDate && endDate) {
-            const compRange = (compareEnabled && compareStart && compareEnd)
+        if (startDate && (isCompare ? endDate : true)) {
+            const finalEndDate = isCompare ? (endDate as Date) : startDate;
+            const compRange = (isCompare && compareEnabled && compareStart && compareEnd)
                 ? { startDate: compareStart, endDate: compareEnd }
                 : undefined;
-            onApply({ startDate, endDate }, compRange, compareEnabled ? compareMode : undefined);
+            onApply({ startDate, endDate: finalEndDate }, compRange, isCompare && compareEnabled ? compareMode : undefined);
         }
     };
 
@@ -277,10 +289,16 @@ export const DateRangePicker: React.FC<Props> = ({
     );
 
     return (
-        <div className={`flex bg-white h-[450px] ${classNames?.root || ''}`}>
+        <div
+            className={`flex flex-col md:flex-row bg-white h-full max-h-[90vh] md:h-[450px] w-full max-w-[100vw] md:w-auto overflow-hidden shadow-xl rounded-lg ${classNames?.root || ''}`}
+            role="dialog"
+            aria-label={labels?.selectDateRange || (isCompare ? 'Select date range' : 'Select a date')}
+        >
             {/* Left Sidebar Pane - Fixed Height, Scrollable Presets + Fixed Compare Bottom */}
-            <div className={`bg-gray-50/50 border-r border-gray-100 flex flex-col h-full shrink-0 transition-all duration-300 overflow-hidden ${showSidebar ? 'w-48 opacity-100' : 'w-0 opacity-0 border-none'} ${classNames?.sidebar || ''}`}>
-                <div className="flex-1 overflow-y-auto preset-scrollbar min-w-[12rem]">
+            <div
+                className={`bg-gray-50/50 border-b md:border-b-0 md:border-r border-gray-100 flex flex-col h-auto md:h-full shrink-0 transition-all duration-300 overflow-hidden ${showSidebar ? 'w-full md:w-48 opacity-100' : 'h-0 w-0 opacity-0 border-none'} ${classNames?.sidebar || ''}`}
+            >
+                <div className="flex-1 overflow-y-auto preset-scrollbar min-w-full md:min-w-[12rem] max-h-[150px] md:max-h-full">
                     <PresetSidebar
                         presets={presets}
                         onSelect={handlePresetSelect}
@@ -290,16 +308,18 @@ export const DateRangePicker: React.FC<Props> = ({
                     />
                 </div>
 
-                <div className="p-3 border-t border-gray-200 bg-gray-50/80 backdrop-blur-sm min-w-[12rem]">
-                    <CompareSection
-                        enabled={compareEnabled}
-                        mode={compareMode}
-                        onToggle={setCompareEnabled}
-                        onModeChange={setCompareMode}
-                        primaryColor={primaryColor}
-                        compareColor={compareColor}
-                    />
-                </div>
+                {isCompare && (
+                    <div className="p-3 border-t border-gray-200 bg-gray-50/80 backdrop-blur-sm min-w-full md:min-w-[12rem]">
+                        <CompareSection
+                            enabled={compareEnabled}
+                            mode={compareMode}
+                            onToggle={setCompareEnabled}
+                            onModeChange={setCompareMode}
+                            primaryColor={primaryColor}
+                            compareColor={compareColor}
+                        />
+                    </div>
+                )}
             </div>
 
             {/* Main Calendar Area - Scrollable Vertically if needed, or just fits */}
@@ -310,7 +330,7 @@ export const DateRangePicker: React.FC<Props> = ({
                         <button
                             className="p-1.5 rounded-md hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
                             onClick={() => setShowSidebar(!showSidebar)}
-                            title={showSidebar ? "Hide sidebar" : "Show sidebar"}
+                            aria-label={showSidebar ? "Hide sidebar" : "Show sidebar"}
                         >
                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -319,18 +339,20 @@ export const DateRangePicker: React.FC<Props> = ({
                         <button
                             className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
                             onClick={handleNavPrev}
+                            aria-label="Previous Month"
                         >
                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
                         </button>
                     </div>
 
                     <div className="text-xs font-medium text-gray-500 flex flex-col items-center">
-                        {startDate && endDate ? (
+                        {startDate && (isCompare ? endDate : true) ? (
                             <span>
-                                {format(startDate, 'MMM d, yyyy', { locale })} - {format(endDate, 'MMM d, yyyy', { locale })}
+                                {format(startDate, 'MMM d, yyyy', { locale })}
+                                {isCompare && endDate && ` - ${format(endDate, 'MMM d, yyyy', { locale })}`}
                             </span>
                         ) : (
-                            <span>{labels?.selectDateRange || 'Select date range'}</span>
+                            <span>{labels?.selectDateRange || (isCompare ? 'Select date range' : 'Select a date')}</span>
                         )}
                         {compareEnabled && compareStart && compareEnd && (
                             <span className="text-[10px] font-medium" style={{ color: compareColor }}>
@@ -342,6 +364,7 @@ export const DateRangePicker: React.FC<Props> = ({
                     <button
                         className="p-1.5 rounded-full hover:bg-gray-100 text-gray-500 hover:text-gray-900 transition-colors cursor-pointer"
                         onClick={handleNavNext}
+                        aria-label="Next Month"
                     >
                         <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
                     </button>
@@ -350,7 +373,7 @@ export const DateRangePicker: React.FC<Props> = ({
                 {/* Calendar Grid - Vertical Stack */}
                 <div className={`flex flex-col gap-4 p-4 overflow-y-auto flex-1 items-center ${classNames?.container || ''}`}>
                     {renderCalendar(viewDate)}
-                    {renderCalendar(addMonths(viewDate, 1))}
+                    {isCompare && renderCalendar(addMonths(viewDate, 1))}
                 </div>
 
                 {/* Footer Actions - Stick to bottom */}
@@ -379,7 +402,7 @@ export const DateRangePicker: React.FC<Props> = ({
                             className={`px-3 py-1.5 rounded-md border border-transparent text-xs font-medium text-white transition-colors disabled:opacity-50 disabled:cursor-not-allowed shadow-sm cursor-pointer ${classNames?.buttonApply || ''}`}
                             style={{ backgroundColor: primaryColor }}
                             onClick={handleApply}
-                            disabled={!startDate || !endDate}
+                            disabled={!startDate || (isCompare && !endDate)}
                         >
                             {labels?.apply || 'Apply'}
                         </button>

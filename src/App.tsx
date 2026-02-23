@@ -9,22 +9,14 @@ const PAGES = ['home', 'docs', 'examples', 'playground'] as const;
 type Page = typeof PAGES[number];
 
 const Container: React.FC<{ children: React.ReactNode; wide?: boolean }> = ({ children, wide }) => (
-  <div style={{
-    maxWidth: wide ? 1280 : 1100,
-    margin: '0 auto',
-    padding: '0 32px',
-  }}>
+  <div className={`${wide ? 'max-w-[1280px]' : 'max-w-[1100px]'} mx-auto px-4 md:px-8 w-full`}>
     {children}
   </div>
 );
 
 // Footer component
 const Footer = () => (
-  <footer style={{
-    borderTop: '1px solid rgba(255,255,255,0.06)',
-    padding: '40px 0',
-    marginTop: 40,
-  }}>
+  <footer className="border-t border-white/5 py-10 mt-10">
     <Container>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>

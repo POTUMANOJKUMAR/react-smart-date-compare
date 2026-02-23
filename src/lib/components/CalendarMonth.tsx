@@ -123,7 +123,7 @@ export const CalendarMonth: React.FC<Props> = ({
             if (time >= safeStart && time <= safeEnd) isCompareInRange = true;
         }
 
-        // Primary date analysis
+        const isToday = isSameDay(day, new Date());
         let isStart = false;
         let isEnd = false;
         let isInRange = false;
@@ -171,7 +171,10 @@ export const CalendarMonth: React.FC<Props> = ({
                 inlineStyle = { backgroundColor: hexToRgba(primaryColor, 0.12), color: primaryColor };
             }
         } else if (!isCompareStart && !isCompareEnd && !isStart && !isEnd) {
-            classes.push('hover:bg-gray-100 text-gray-700 rounded-full');
+            classes.push('hover:bg-gray-100 text-gray-700 rounded-full active:scale-95');
+            if (isToday) {
+                classes.push('font-bold ring-1 ring-inset ring-gray-200');
+            }
         }
 
         // ─── Apply endpoint circles ────────────────────────────────
